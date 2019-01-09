@@ -1,0 +1,11 @@
+{
+    "require": {
+        "fabpot/goutte": "^3.2",
+        "sunra/php-simple-html-dom-parser": "^1.5",
+        "guzzlehttp/guzzle": "^6.3",
+        "symfony/dom-crawler": "^4.2",
+        "symfony/css-selector": "^4.2",
+        "guzzle/guzzle": "~3.9",
+        "google/photos-library": "^1.1"
+    }
+}
