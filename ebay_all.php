@@ -13,10 +13,24 @@ $client = new Client();
 $main_data = [];
   
 // Go to the symfony.com website
-$crawler = $client->request('GET', $_POST['url']);
+$crawler = $client->request('GET',$_POST['url']);
   
 foreach ($crawler as $domElement) {
     $data = $domElement->nodeValue;  
+}
+
+//print_r($data); die;
+//for category id
+$category_ids = explode('targetingParameters',$data);
+$category_ids = explode(':',$category_ids[1]);
+$category_ids = explode(',',$category_ids[3]); 
+$main_cate_id = [];
+foreach($category_ids as $ct){
+	preg_match_all('!\d+!', $ct, $matches);
+	$category_ids = $matches[0][0];	
+	if($category_ids){
+	   $main_cate_id[] = $category_ids;
+	}
 }
 
 //discount price
@@ -39,7 +53,7 @@ $ePID_3 = $ePID_3[0];
 $pricing = explode('Now', $data);
 $main = explode('Item specifics', $data);  
    
-//for category id 
+//for category  
 $raw = explode('if ((typeof (oGaugeInfo) !', $main[1]);
 $for_category_id = explode('Listed in category:', $main[0]);
 $for_category = explode('>', $for_category_id[1]);
@@ -225,7 +239,7 @@ if($binPriceOnly){
 $main_data['list_price'] = trim(preg_replace('/\t\s+/', '', $list_price[1]));
 $main_data['category'] = trim(preg_replace('/\t\s+/', '',$for_category[0]));
 //$main_data['epids'] = epid($raw[0]);
-$main_data['cat_id'] = get_category_id($_POST['url']); 
+$main_data['cat_id'] = end($main_cate_id);//get_category_id($_POST['url']); 
   
 $face['test'] = $main_data;
 echo json_encode($face);

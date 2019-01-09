@@ -4,6 +4,11 @@
 
         var ebay_image_url = _that.parent().parent().next().next().find('img').attr('src');
         var url = $('#url_search').val();
+		
+		if(!url){
+			alert('Enter URL');
+			return false;
+		}
 
         var title = $(this).prev().text();      
         var host = get_hostname(url);

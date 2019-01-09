@@ -1,5 +1,5 @@
 <?php
-sleep(1);
+sleep(2);
 
 $asin  = $_POST['asin'];
 $url = 'https://amazonsoldout.com/legendaryanalysis.com/extension/aws.php';

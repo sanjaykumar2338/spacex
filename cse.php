@@ -20,8 +20,8 @@
       .gs-image:hover {
         -ms-transform: scale(4.5);
         -webkit-transform: scale(4.5);
-        transform: scale(5.5);   
-        margin-left: 50px;      
+        transform: scale(4.5);   
+        margin-left: 40px;      
       }
 
       span {
