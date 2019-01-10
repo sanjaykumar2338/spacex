@@ -24,6 +24,10 @@
         margin-left: 40px;      
       }
 
+      .gs-webResult .gs-result{
+        padding-bottom: 20px;
+      } 
+
       span {
         cursor: pointer;
       }
