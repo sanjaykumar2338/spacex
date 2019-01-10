@@ -12,6 +12,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">
     </script>    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./tipped.css">
     <style>
       .gsc-table-cell-thumbnail.hover .gs-image-box.gs-web-image-box.gs-web-image-box-portrait{
         overflow: visible;
@@ -277,7 +278,7 @@
         }        
       }, 1000); 
 
-      function infoTitle(x){   
+      function infoTitle(x){        
          var url = $(x).parent().prev().attr('href');  
 
          if(!url){
@@ -296,7 +297,8 @@
           var regex = RegExp("https://www.amazon.com/([\\w-]+/)?(dp|gp/product)/(\\w+/)?(\\w{10})");
           m = url.match(regex);
 
-          if (m) {           
+          if (m) { 
+            Tipped.create(x,'Wait...');          
             $.post('amazon.php',{asin:m[4]},function(data){
               var obj = jQuery.parseJSON(data);
               
@@ -319,17 +321,21 @@
                   images = data;
               } 
 
-              let info = 'MPN: '+obj.test.mpn_number+' UPC: ' +obj.test.upc+' ASIN: '+obj.test.asin+' Model: '+obj.test.model+' Price: '+obj.test.formattedPrice+' Brand: '+obj.test.brand+' Title: '+obj.test.title+' Description: '+obj.test.editorial_review+' Category: '+obj.test.category.Ancestors.BrowseNode.Name;              
+              let info = 'MPN: '+obj.test.mpn_number+' UPC: ' +obj.test.upc+' ASIN: '+obj.test.asin+' Model: '+obj.test.model+' Price: '+obj.test.formattedPrice+' Brand: '+obj.test.brand+' Title: '+obj.test.title+' Description: '+obj.test.editorial_review+' Category: '+obj.test.category.Ancestors.BrowseNode.Name; 
 
-              $(x).attr('title', info);
+              Tipped.create(x, info);             
+
+              //$(x).attr('title', info);
               }else{             
                 let title = "Image :  MPN:  UPC:  ASIN: "+m[4]+" Model:  Price: Brand:  Title:  Description:  Category: ";
-                $(x).attr('title', title);
+                Tipped.create(x, title);             
+                //$(x).attr('title', title);
               }
             });
           }
           else{
-            $(x).attr('title', 'Not detail page url');               
+            Tipped.create(x, 'Not detail page url'); 
+            //$(x).attr('title', 'Not detail page url');               
           }
         }
         else{
@@ -339,9 +345,12 @@
           console.log('url', url);
 
           if(url2 != 'https://www.ebay.com'){
-            $(x).attr('title', 'Not detail page url');  
+            Tipped.create(x, 'Not detail page url'); 
+            //$(x).attr('title', 'Not detail page url');  
             return false;
           }else{
+            Tipped.create(x,'Wait...');
+
             parts = url.split("/"),
             last_part = parts[parts.length-1];
 
@@ -365,12 +374,14 @@
                 }  
               
                 let title = "Category ID: "+obj.test.cat_id+" ePID: "+obj.test.epid+" MPN: "+obj.test.mpn+" UPC/EAN: "+obj.test.upc+" Color: "+obj.test.color+" Model: "+obj.test.model+" Price: "+obj.test.list_price+" Brand: "+obj.test.brand+" Title: "+obj.test.title+" Description: "+obj.test.description+" Category: "+obj.test.category;
-                
-                $(x).attr('title',title);
+
+                Tipped.create(x, title);                 
+                //$(x).attr('title',title);
               });            
             }
             else{
-              $(x).attr('title', 'Not detail page url');               
+              Tipped.create(x, 'Not detail page url');
+              //$(x).attr('title', 'Not detail page url');               
             }
           }
         }  
@@ -386,5 +397,6 @@
       });
     </script>
     <script type="text/javascript" src="./common.js"></script>
+    <script type="text/javascript" src="./tipped.js"></script>
   </body>
 </html>
