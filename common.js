@@ -2,13 +2,13 @@
         e.preventDefault();        
         var _that = $(this);
 
-        var ebay_image_url = _that.parent().parent().next().next().find('img').attr('src');
+        var ebay_image_url = ""
         var url = $('#url_search').val();
 		
-		if(!url){
-			alert('Enter URL');
-			return false;
-		}
+    		if(!url){
+    			alert('Enter URL');
+    			return false;
+    		}
 
         var title = $(this).prev().text();      
         var host = get_hostname(url);
@@ -43,11 +43,11 @@
                   images = data;
               }  
 
-              $('#outpout').html("<p><b>Image : "+images+"</b><br><b>MPN: "+obj.test.mpn_number+"</b><br><b>UPC: "+obj.test.upc+"</b><br><b>ASIN: "+obj.test.asin+"</b><br><b>Model: "+obj.test.model+"</b><br><b>Price: "+obj.test.formattedPrice+"</b><br><b>Brand: "+obj.test.brand+"</b><br><b>Title: "+obj.test.title+"</b><br><b>Description: "+obj.test.editorial_review+"</b><br><b>Category: "+obj.test.category.Ancestors.BrowseNode.Name+"</b></p>");
+              $('#outpout').html("Image : "+images+"<br>MPN: "+obj.test.mpn_number+"<brUPC: "+obj.test.upc+"<br>ASIN: "+obj.test.asin+"<br>Model: "+obj.test.model+"<br>Price: "+obj.test.formattedPrice+"<br>Brand: "+obj.test.brand+"<br>Title: "+obj.test.title+"<br>Description: "+obj.test.editorial_review+"<br>Category: "+obj.test.category.Ancestors.BrowseNode.Name);
 
               }else{
                 let title = _that.prev().text();
-                $('#outpout').html("<p><b>Image : <a target='_blank' href='"+ebay_image_url+"'>Link</a></b><br><b>MPN: </b><br><b>UPC: </b><br><b>ASIN: "+m[4]+"</b><br><b>Model: </b><br><b>Price: </b><br><b>Brand: </b><br><b>Title: "+title+"</b><br><b>Description: </b><br><b>Category: </b></p>");
+                $('#outpout').html("MPN:  UPC:  ASIN: "+m[4]+" Model:  Price:  Brand:  Title:  Description:  Category: ");
               }
             });
           }
@@ -77,7 +77,7 @@
                 var images;
                 for (i = 0; i < obj.test.images.length; ++i) {                 
                    if(obj.test.images[i] && obj.test.images[i] != "" && obj.test.images[i] != undefined){                   
-                      images += "<a target='_blank' href='"+obj.test.images[i]+"'>Link</a> ,";                    
+                      images = "<a target='_blank' href='"+obj.test.images[1]+"'>Link</a>";                    
                    }
                 }   
 
@@ -87,7 +87,7 @@
                     images = data;
                 }  
                 
-                $('#outpout').html("<p><b>Image : "+images+"</b><br><b>Category ID: "+obj.test.cat_id+"</b><br><b>ePID: "+obj.test.epid+"</b><br><b>MPN: "+obj.test.mpn+"</b><br><b>UPC/EAN: "+obj.test.upc+"</b><br><b>Color: "+obj.test.color+"</b><br><b>Model: "+obj.test.model+"</b><br><b>Price: "+obj.test.list_price+"</b><br><b>Brand: "+obj.test.brand+"</b><br><b>Title: <span id='common_title'>"+obj.test.title+"</span></b><br><b>Description: "+obj.test.description+"</b><br><b>Category: "+obj.test.category+"</b></p>");
+                $('#outpout').html("Image : "+images+"<br>Category ID: "+obj.test.cat_id+"<br>ePID: "+obj.test.epid+"<br>MPN: "+obj.test.mpn+"<br>UPC/EAN: "+obj.test.upc+"<br>Color: "+obj.test.color+"<br>Model: "+obj.test.model+"<br>Price: "+obj.test.list_price+"<br>Brand: "+obj.test.brand+"<br>Title: <span id='common_title'>"+obj.test.title+"</span><br>Description: "+obj.test.description+"<br>Category: "+obj.test.category);
               });            
             }
             else{
@@ -95,4 +95,4 @@
             }
           }
         }
-});
+  });

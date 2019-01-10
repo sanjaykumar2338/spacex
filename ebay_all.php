@@ -255,7 +255,7 @@ function numeric_val($val){
 
 function getdescription(){
 	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_URL,"http://moxycrm.com/users/scrapdata");
+	curl_setopt($ch, CURLOPT_URL,"http://moxycrm.com/users/getdetails");
 	curl_setopt($ch, CURLOPT_POST, 1);
 	curl_setopt($ch, CURLOPT_POSTFIELDS,
             "url=".$_POST['url']);

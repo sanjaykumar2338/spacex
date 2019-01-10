@@ -19,6 +19,19 @@ foreach ($crawler as $domElement) {
     $data = $domElement->nodeValue;  
 }
 
+//for category id
+$category_ids = explode('targetingParameters',$data);
+$category_ids = explode(':',$category_ids[1]);
+$category_ids = explode(',',$category_ids[3]); 
+$main_cate_id = [];
+foreach($category_ids as $ct){
+  preg_match_all('!\d+!', $ct, $matches);
+  $category_ids = $matches[0][0]; 
+  if($category_ids){
+     $main_cate_id[] = $category_ids;
+  }
+}
+
 //discount price
 $binPriceOnly = explode('binPriceOnly', $data); 
 $binPriceOnly = explode(',', $binPriceOnly[1]); 
@@ -226,7 +239,7 @@ if($binPriceOnly){
 $main_data['list_price'] = trim(preg_replace('/\t\s+/', '', $list_price[1]));
 $main_data['category'] = trim(preg_replace('/\t\s+/', '',$for_category[0]));
 //$main_data['epids'] = epid($raw[0]);
-$main_data['cat_id'] = get_category_id($_POST['url']); 
+$main_data['cat_id'] = end($main_cate_id); //get_category_id($_POST['url']); 
 
 $other_data = getdescription();
 $main_data['title'] = $other_data['title'];
@@ -247,7 +260,7 @@ function numeric_val($val){
 
 function getdescription(){
 	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_URL,"http://moxycrm.com/users/scrapdata");
+	curl_setopt($ch, CURLOPT_URL,"http://moxycrm.com/users/getdetails");
 	curl_setopt($ch, CURLOPT_POST, 1);
 	curl_setopt($ch, CURLOPT_POSTFIELDS,
             "url=".$_POST['url']);

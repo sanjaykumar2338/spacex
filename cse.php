@@ -8,9 +8,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
     </script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.1/jquery.twbsPagination.min.js">
     </script>    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
@@ -66,11 +65,7 @@
       input#url {
         width: 50%;
         display: inline-block;
-      }
-      #scrapbutton {
-        width: 40%;
-        display: inline-block;
-      }
+      }      
     </style>
   </head>
   <body>
@@ -138,19 +133,6 @@
       </div>
     </div>
     <script>
-
-      /*** TEXT FIELD URL SEARCH ON ENTER ***/  
-      $(document).keypress(function(e) {
-        if(e.which == 13) {
-          //search();
-        }
-      });
-
-      /*** TEXT FIELD URL SEARCH ON CLICK ***/  
-      $('#scrap1').on('click',function(e){
-        //search();
-      });
-
       /*** SEARCH FUNCTION TO SEARCH DATA OF URL ***/  
       function search(){
         //e.preventDefault();                        
@@ -177,8 +159,8 @@
         $('#sliderModal').modal('show');
       });
 
-      /*** FOR SCRAP A DETAILS IN MODAL OF EBAY AMAZON ***/
-      $(document).on("click", ".scrap_url", function(e){
+      /*** FOR GET A DETAILS IN MODAL OF EBAY AMAZON ***/
+      $(document).on("click", ".get_url", function(e){
         e.preventDefault();
         $(document).find('.previousclick').css("color","black");
         var _that = $(this);
@@ -216,12 +198,16 @@
                   images = data;
               }         
               
-              if(obj.test.asin != ""){              
-                $('#outpout').html("<p><b>Image :  "+images+"</b><br><b>MPN: "+obj.test.mpn_number+"</b><br><b>UPC: "+obj.test.upc+"</b><br><b>ASIN: "+obj.test.asin+"</b><br><b>Model: "+obj.test.model+"</b><br><b>Price: "+obj.test.formattedPrice+"</b><br><b>Brand: "+obj.test.brand+"</b><br><b>Title: "+obj.test.title+"</b><br><b>Description: "+obj.test.editorial_review+"</b><br><b>Category: "+obj.test.category.Ancestors.BrowseNode.Name+"</b></p>");
+              if(obj.test.asin != ""){   
+                if(obj.test.formattedPrice == ""){
+                  obj.test.formattedPrice = obj.test.lowest_price;
+                }
+
+                $('#outpout').html("<p>Image :  "+images+"<br>MPN: "+obj.test.mpn_number+"<br>UPC: "+obj.test.upc+"<br>ASIN: "+obj.test.asin+"<br>Model: "+obj.test.model+"<br>Price: "+obj.test.formattedPrice+"<br>Brand: "+obj.test.brand+"<br>Title: "+obj.test.title+"<br>Description: "+obj.test.editorial_review+"<br>Category: "+obj.test.category.Ancestors.BrowseNode.Name+"</p>");
               }
               else{
                 let title = _that.prev().text();
-                $('#outpout').html("<p><b>Image : <a target='_blank' href='"+ebay_image_url+"'>Link</a></b><br><b>MPN: </b><br><b>UPC: </b><br><b>ASIN: "+m[4]+"</b><br><b>Model: </b><br><b>Price: </b><br><b>Brand: </b><br><b>Title: "+title+"</b><br><b>Description: </b><br><b>Category: </b></p>");
+                $('#outpout').html("<p>Image : <a target='_blank' href='"+ebay_image_url+"'>Link</a><br>MPN: <br>UPC: <br>ASIN: "+m[4]+"<br>Model: <br>Price: <br>Brand: <br>Title: "+title+"<br>Description: <br>Category: </p>");
               }
             });
           }
@@ -246,7 +232,7 @@
             
               $.post('ebay_all.php',{url:url} ,function(data){
                 var obj = jQuery.parseJSON(data);
-                $('#outpout').html("<p><b>Image : "+"<a target='_blank' href='"+ebay_image_url+"'>Link</a></b><br><b>Category ID: "+obj.test.cat_id+"</b><br><b>ePID: "+obj.test.epid+"</b><br><b>MPN: "+obj.test.mpn+"</b><br><b>UPC/EAN: "+obj.test.upc+"</b><br><b>Color: "+obj.test.color+"</b><br><b>Model: "+obj.test.model+"</b><br><b>Price: "+obj.test.list_price+"</b><br><b>Brand: "+obj.test.brand+"</b><br><b>Title: "+title+"</b><br><b>Description: "+obj.test.description+"</b><br><b>Category: "+obj.test.category+"</b></p>");
+                $('#outpout').html("<p>Image : "+"<a target='_blank' href='"+ebay_image_url+"'>Link</a><br>Category ID: "+obj.test.cat_id+"<br>ePID: "+obj.test.epid+"<br>MPN: "+obj.test.mpn+"<br>UPC/EAN: "+obj.test.upc+"<br>Color: "+obj.test.color+"<br>Model: "+obj.test.model+"<br>Price: "+obj.test.list_price+"<br>Brand: "+obj.test.brand+"<br>Title: "+title+"<br>Description: "+obj.test.description+"<br>Category: "+obj.test.category+"</p>");
               });            
             }
             else{
@@ -280,13 +266,117 @@
 
       /*** FOR ADDING THUMB ICON ***/
       window.setInterval(function(){
+
         $(document).find('.gsc-inline-block').css('height','30px');
         if($('.gsc-thumbnail-inside').find('span').length == 0) {
-          $('.gs-title a').after('<span class="scrap_url">&nbsp;&nbsp;&nbsp;&nbsp;<i style=" text-decoration: none;float: left;margin-right: 5PX;" class="fa fa-thumbs-up"></i></span>')
+          $('.gs-title a').each(function(){
+              let url = $(this).attr('href');            
+            
+              $(this).after('<span class="get_url">&nbsp;&nbsp;&nbsp;&nbsp;<i onmouseover="infoTitle(this)" title="" style="text-decoration: none;float: left;margin-right: 5PX;" class="fa fa-thumbs-up"></i></span>');                         
+            });
+        }        
+      }, 1000); 
+
+      function infoTitle(x){   
+         var url = $(x).parent().prev().attr('href');  
+
+         if(!url){
+          return "";
+         }
+
+         if($(x).parent().hasClass('done')){
+            return false;
+         }
+         
+         $(x).parent().addClass('done');
+
+         var host = get_hostname(url);
+
+         if(host == 'https://www.amazon.com'){
+          var regex = RegExp("https://www.amazon.com/([\\w-]+/)?(dp|gp/product)/(\\w+/)?(\\w{10})");
+          m = url.match(regex);
+
+          if (m) {           
+            $.post('amazon.php',{asin:m[4]},function(data){
+              var obj = jQuery.parseJSON(data);
+              
+              if(obj.test.asin != ""){   
+                if(obj.test.formattedPrice == ""){
+                  obj.test.formattedPrice = obj.test.lowest_price;
+              }
+
+              var i;
+              var images;
+              for (i = 0; i < obj.test.all_images.length; ++i) {                 
+                 if(obj.test.all_images[i] && obj.test.all_images[i] != "" && obj.test.all_images[i] != undefined){                   
+                    images += "<a target='_blank' href='"+obj.test.all_images[i]+"'>Link</a> ,";                    
+                 }
+              }   
+
+              if(images.indexOf("undefined") >= 0){                
+                  var data = images.split('undefined');
+                  data = data[1].slice(0,-1)
+                  images = data;
+              } 
+
+              let info = 'MPN: '+obj.test.mpn_number+' UPC: ' +obj.test.upc+' ASIN: '+obj.test.asin+' Model: '+obj.test.model+' Price: '+obj.test.formattedPrice+' Brand: '+obj.test.brand+' Title: '+obj.test.title+' Description: '+obj.test.editorial_review+' Category: '+obj.test.category.Ancestors.BrowseNode.Name;              
+
+              $(x).attr('title', info);
+              }else{             
+                let title = "Image :  MPN:  UPC:  ASIN: "+m[4]+" Model:  Price: Brand:  Title:  Description:  Category: ";
+                $(x).attr('title', title);
+              }
+            });
+          }
+          else{
+            $(x).attr('title', 'Not detail page url');               
+          }
         }
-      }, 1000);
+        else{
+          var url2 = get_hostname(url);
 
+          console.log('url2', url2);
+          console.log('url', url);
 
+          if(url2 != 'https://www.ebay.com'){
+            $(x).attr('title', 'Not detail page url');  
+            return false;
+          }else{
+            parts = url.split("/"),
+            last_part = parts[parts.length-1];
+
+            var t = $.isNumeric(last_part)
+            if(t && last_part.length == 12){             
+              $.post('ebay_all_custom.php',{url:url} ,function(data){
+                var obj = jQuery.parseJSON(data);
+
+                var i;
+                var images;
+                for (i = 0; i < obj.test.images.length; ++i) {                 
+                   if(obj.test.images[i] && obj.test.images[i] != "" && obj.test.images[i] != undefined){                   
+                      images = "<a target='_blank' href='"+obj.test.images[1]+"'>Link</a>";                    
+                   }
+                }   
+
+                if(images.indexOf("undefined") >= 0){                
+                    var data = images.split('undefined');
+                    data = data[1].slice(0,-1)
+                    images = data;
+                }  
+              
+                let title = "Category ID: "+obj.test.cat_id+" ePID: "+obj.test.epid+" MPN: "+obj.test.mpn+" UPC/EAN: "+obj.test.upc+" Color: "+obj.test.color+" Model: "+obj.test.model+" Price: "+obj.test.list_price+" Brand: "+obj.test.brand+" Title: "+obj.test.title+" Description: "+obj.test.description+" Category: "+obj.test.category;
+                
+                $(x).attr('title',title);
+              });            
+            }
+            else{
+              $(x).attr('title', 'Not detail page url');               
+            }
+          }
+        }  
+      }    
+
+      /*** ADD hover class to popup a image ***/
       $("#sliderModal").mouseover(function(){
         $(this).find('.gsc-thumbnail').each(function(){
           if(!$(this).hasClass('hover')){
