@@ -46,7 +46,7 @@
          <form action="/action_page.php">
             <div class="form-group">
                <label for="email">URL:</label>
-               <input type="text" value="" class="form-control" id="url" placeholder="Enter URL" name="url">
+               <input type="text" value="https://photos.app.goo.gl/zwjinGi98UNCscue6" class="form-control" id="url" placeholder="Enter URL" name="url">
             </div>
             <button type="submit" id="scrap" class="btn btn-default">Submit</button>
          </form>
